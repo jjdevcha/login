@@ -4,6 +4,7 @@ import FormButton from "@/components/form-btn"
 import Input from "@/components/input"
 import { FireIcon } from "@heroicons/react/16/solid"
 import { useFormState } from "react-dom"
+import { PASSWORD_MIN_LENGTH, USERNAME_MIN_LENGTH } from "../lib/constants"
 import { handleForm } from "./action"
 
 export default function Home() {
@@ -18,27 +19,29 @@ export default function Home() {
 					type="email"
 					placeholder="Email"
 					required
-					errors={[]}
+					errors={state?.fieldErrors?.email}
 				/>
 				<Input
 					name="username"
 					type="text"
 					placeholder="Username"
 					required
-					errors={[]}
+					errors={state?.fieldErrors?.username}
+					minLength={USERNAME_MIN_LENGTH}
 				/>
 				<Input
 					name="password"
 					type="password"
 					placeholder="Password"
 					required
-					errors={state?.errors ?? []}
+					errors={state?.fieldErrors?.password}
+					minLength={PASSWORD_MIN_LENGTH}
 				/>
 
 				<FormButton text="Log in" />
-				{state?.message && (
+				{state?.loggedIn && (
 					<div className="w-full h-10 bg-green-500 text-white p-2 flex justify-center items-center rounded-md">
-						{state.message}
+						Welcome back
 					</div>
 				)}
 			</form>
