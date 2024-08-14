@@ -3,6 +3,7 @@
 import Button from "@/components/button"
 import Input from "@/components/input"
 import { SpeakerWaveIcon } from "@heroicons/react/16/solid"
+import Link from "next/link"
 import { useFormState } from "react-dom"
 import { PASSWORD_MIN_LENGTH } from "../../lib/constants"
 import { logIn } from "./action"
@@ -33,6 +34,9 @@ export default function Login() {
 
 				<Button text="Log in" />
 			</form>
+			<Link href="/create-account">
+				<Button text="Create account" />
+			</Link>
 		</div>
 	)
 }

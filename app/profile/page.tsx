@@ -24,7 +24,7 @@ export default async function Profile() {
 		"use server"
 		const session = await getSession()
 		session.destroy()
-		redirect("/")
+		redirect("/login")
 	}
 	return (
 		<div className="flex flex-col justify-center items-center w-full h-screen gap-4">
