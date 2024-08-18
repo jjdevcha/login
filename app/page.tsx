@@ -10,6 +10,7 @@ export default async function Home() {
 	if (!session?.id) {
 		redirect("/login")
 	}
+
 	console.log("Session data:", session)
 	return (
 		<div className="flex flex-col items-center min-h-screen p-6">

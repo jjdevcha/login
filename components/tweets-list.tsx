@@ -56,7 +56,8 @@ export default function TweetsList({ initialTweets }: TweetsListProps) {
 					created_at={tweet.created_at.toString()}
 					content={tweet.content}
 					user={tweet.user}
-					likes={tweet.likes}
+					likes={tweet._count.likes}
+					comments={tweet._count.comments}
 				/>
 			))}
 			{!isLastPage ? (
