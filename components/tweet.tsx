@@ -6,15 +6,17 @@ import {
 import Link from "next/link"
 
 export interface TweetProps {
-	id: string
-	created_at: string
+	id: number
+	created_at: Date
 	content: string
 	user: {
 		username: string
 		id: number
 	}
-	likes: number
-	comments: number
+	_count: {
+		likes: number
+		comments: number
+	}
 }
 
 export default function Tweet({
@@ -22,8 +24,7 @@ export default function Tweet({
 	created_at,
 	content,
 	user,
-	likes,
-	comments,
+	_count: { likes, comments },
 }: TweetProps) {
 	return (
 		<Link

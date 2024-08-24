@@ -3,6 +3,7 @@
 import db from "@/lib/db"
 import getSession from "@/lib/session"
 import { revalidateTag } from "next/cache"
+import { redirect } from "next/navigation"
 
 export async function likeTweet(tweetId: number) {
 	await new Promise((response) => setTimeout(response, 1000))
@@ -14,7 +15,7 @@ export async function likeTweet(tweetId: number) {
 				userId: session.id!,
 			},
 		})
-		revalidateTag(`like-statues-${tweetId}`)
+		revalidateTag(`like-status-${tweetId}`)
 	} catch (error) {
 		console.error(error)
 	}
@@ -32,8 +33,17 @@ export async function unlikeTweet(tweetId: number) {
 				},
 			},
 		})
-		revalidateTag(`like-statues-${tweetId}`)
+		revalidateTag(`like-status-${tweetId}`)
 	} catch (error) {
 		console.error(error)
 	}
+}
+
+export async function deleteTweet(tweetId: number) {
+	await db.tweet.delete({
+		where: {
+			id: tweetId,
+		},
+	})
+	redirect("/")
 }

@@ -2,6 +2,7 @@
 
 import db from "@/lib/db"
 import getSession from "@/lib/session"
+import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { z } from "zod"
 
@@ -11,20 +12,21 @@ export async function getMoreTweets(page: number) {
 			id: true,
 			created_at: true,
 			content: true,
+			_count: {
+				select: {
+					likes: true,
+					comments: true,
+				},
+			},
 			user: {
 				select: {
 					username: true,
 					id: true,
 				},
 			},
-			likes: {
-				select: {
-					userId: true,
-				},
-			},
 		},
-		skip: page * 5,
-		take: 5,
+		skip: page * 3,
+		take: 3,
 		orderBy: {
 			created_at: "desc",
 		},
@@ -33,30 +35,71 @@ export async function getMoreTweets(page: number) {
 	return tweets
 }
 
-const yarnSchema = z.object({
-	yarn: z
+const tweetSchema = z.object({
+	tweet: z
 		.string({ required_error: "Text is required" })
-		.min(10, "Yarning should be at least 10 characters"),
+		.min(10, "tweeting should be at least 10 characters"),
 })
 
-export async function yarn(_: any, formData: FormData) {
+export async function addTweet(_: any, formData: FormData) {
 	const data = {
-		yarn: formData.get("yarn"),
+		tweet: formData.get("tweet"),
 	}
 
-	const result = yarnSchema.safeParse(data)
+	const result = tweetSchema.safeParse(data)
 	if (!result.success) {
 		return result.error.flatten()
 	} else {
 		const session = await getSession()
 		if (session.id) {
-			const yarn = await db.tweet.create({
+			const tweet = await db.tweet.create({
 				data: {
-					content: result.data.yarn,
+					content: result.data.tweet,
 					userId: session.id,
 				},
 			})
-			redirect("/")
+			redirect(`/tweets/${tweet.id}`)
+		}
+	}
+}
+
+const commentSchema = z.object({
+	comment: z
+		.string({ required_error: "Text is required" })
+		.min(10, "Comment should be at least 10 characters"),
+})
+
+export async function addComment(formData: FormData, tweetId: number) {
+	const data = {
+		comment: formData.get("comment"),
+	}
+
+	const result = commentSchema.safeParse(data)
+	if (!result.success) {
+		return result.error.flatten()
+	} else {
+		const session = await getSession()
+		if (session.id) {
+			const comment = await db.comment.create({
+				data: {
+					content: result.data.comment,
+					user: {
+						connect: {
+							id: session.id,
+						},
+					},
+					tweet: {
+						connect: {
+							id: tweetId,
+						},
+					},
+				},
+				include: {
+					user: true,
+				},
+			})
+			revalidatePath(`/tweets/${tweetId}`)
+			return comment
 		}
 	}
 }
