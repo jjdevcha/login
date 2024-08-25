@@ -1,4 +1,5 @@
 import Button from "@/components/button"
+import Header from "@/components/header"
 import Tweet from "@/components/tweet"
 import db from "@/lib/db"
 import getSession from "@/lib/session"
@@ -67,7 +68,8 @@ export default async function userProfile({
 	}
 	const userTweets = await getUserTweets(username!)
 	return (
-		<div className="flex flex-col justify-center w-full h-screen gap-4 p-6">
+		<div className="flex flex-col justify-center w-full min-h-screen gap-4 p-6">
+			<Header username={username} />
 			<h1 className="text-2xl font-extrabold">Profile</h1>
 			{isOwner && (
 				<Link href={`/users/${username}/edit`}>
@@ -78,7 +80,7 @@ export default async function userProfile({
 			)}
 			<h2>username: {username}</h2>
 			<h2>email: {user?.email}</h2>
-			<h2>{username}'s yarns:</h2>
+			<h2 className="font-bold text-lg">{username}'s yarns:</h2>
 			{userTweets.length ? (
 				userTweets.map((tweet) => <Tweet key={tweet.id} {...tweet} />)
 			) : (

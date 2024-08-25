@@ -1,9 +1,7 @@
+import Header from "@/components/header"
 import TweetsList from "@/components/tweets-list"
 import db from "@/lib/db"
-import { SpeakerWaveIcon } from "@heroicons/react/16/solid"
-import { UserCircleIcon } from "@heroicons/react/24/outline"
 import { Prisma } from "@prisma/client"
-import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 import AddYarn from "../../components/addYarn"
 import getSession from "../../lib/session"
@@ -64,15 +62,8 @@ export default async function Home() {
 
 	const InitialTweets = await getInitialTweets()
 	return (
-		<div className="flex flex-col items-center min-h-screen p-6 relative">
-			<Link href={`/users/${user.username}`}>
-				<UserCircleIcon className="absolute top-6 right-6 size-8 text-orange-500" />
-			</Link>
-			<div className="my-auto flex flex-col items-center gap-2 *:font-medium">
-				<SpeakerWaveIcon className="w-12 h-12 text-orange-500" />
-				<h1 className="text-4xl ">Yarning</h1>
-				<h2 className="text-2xl">Let's have a yarn together!</h2>
-			</div>
+		<div className="flex flex-col min-h-screen p-6 w-[100%]">
+			<Header username={user.username} />
 			<AddYarn />
 			{InitialTweets.length ? (
 				<TweetsList initialTweets={InitialTweets} />

@@ -13,7 +13,7 @@ export default function Button({ text, onClick }: ButtonProps) {
 		<button
 			onClick={onClick}
 			disabled={pending}
-			className="p-2 h-10 w-56 disabled:bg-neutral-400 disabled:text-neutral-300 disabled:cursor-not-allowed bg-orange-500 text-white rounded-md">
+			className="p-2 h-10 w-56 mt-4 disabled:bg-neutral-400 disabled:text-neutral-300 disabled:cursor-not-allowed bg-orange-500 text-white rounded-md">
 			{pending ? "Loading..." : text}
 		</button>
 	)

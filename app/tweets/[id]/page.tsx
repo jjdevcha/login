@@ -1,5 +1,6 @@
 import AddComment from "@/components/addComment"
 import DeleteYarn from "@/components/deleteYarn"
+import Header from "@/components/header"
 import LikeButton from "@/components/likeButton"
 import db from "@/lib/db"
 import getSession from "@/lib/session"
@@ -119,7 +120,8 @@ export default async function TweetDetail({
 	const initialComments = await getInitialComments(id)
 
 	return (
-		<div className="p-6 flex flex-col gap-3">
+		<div className="p-6 flex flex-col gap-3 w-full min-h-screen">
+			<Header username={username!.username} />
 			<div className="flex justify-between">
 				<div className="flex flex-col">
 					<Link href={`/users/${tweet.user.username}`}>

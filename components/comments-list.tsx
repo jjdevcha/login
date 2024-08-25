@@ -14,11 +14,12 @@ interface CommentProps {
 
 export default function CommentsList({ comments }: CommentProps) {
 	return (
-		<div>
+		<div className="flex flex-col gap-2 my-4">
+			<h2 className="font-bold">Comments</h2>
 			{comments.map((comment) => (
-				<div key={comment.id}>
-					<p>{comment.content}</p>
-					<p>{comment.user.username}</p>
+				<div key={comment.id} className="flex">
+					<span className="font-bold">{comment.user.username}</span> :{" "}
+					{comment.content}
 				</div>
 			))}
 		</div>

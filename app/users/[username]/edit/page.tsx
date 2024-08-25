@@ -1,39 +1,41 @@
+"use client"
+
+import Button from "@/components/button"
+import Header from "@/components/header"
 import Input from "@/components/input"
-import db from "@/lib/db"
+import { PASSWORD_MIN_LENGTH, USERNAME_MIN_LENGTH } from "@/lib/constants"
+import { useFormState } from "react-dom"
+import { editProfileAction } from "./action"
 
-async function getUser(username: string) {
-	const user = await db.user.findUnique({
-		where: {
-			username,
-		},
-	})
-	if (user) {
-		return user
-	}
-}
-
-export default async function editProfile({
+export default function editProfile({
 	params,
 }: {
 	params: { username: string }
 }) {
 	const username = params.username
-	const user = await getUser(username)
+	const [state, action] = useFormState(editProfileAction, null)
 
 	return (
-		<div>
-			<h1>Edit Profile</h1>
-			<form>
+		<div className="flex flex-col gap-4 p-4 w-full min-h-screen">
+			<Header username={username} />
+			<h1 className="text-lg font-bold">Edit Profile</h1>
+			<form action={action}>
 				<label>
 					Username
-					<Input name="username" type="text" value={user?.username} />
+					<Input
+						name="username"
+						type="text"
+						placeholder={username}
+						errors={state?.fieldErrors?.username}
+						minLength={USERNAME_MIN_LENGTH}
+					/>
 				</label>
 				<label>
 					Email
 					<Input
 						name="email"
 						type="text"
-						value={user?.email || undefined}
+						errors={state?.fieldErrors?.email}
 					/>
 				</label>
 				<label>
@@ -42,6 +44,17 @@ export default async function editProfile({
 						name="password"
 						type="text"
 						placeholder="New password"
+						minLength={PASSWORD_MIN_LENGTH}
+						errors={state?.fieldErrors?.password}
+					/>
+				</label>
+				<label>
+					Confirm Password
+					<Input
+						name="confirm_password"
+						type="text"
+						placeholder="Confirm password"
+						errors={state?.fieldErrors?.confirm_password}
 					/>
 				</label>
 				<label>
@@ -49,11 +62,11 @@ export default async function editProfile({
 					<Input
 						name="bio"
 						type="text"
-						value={user?.bio || undefined}
+						errors={state?.fieldErrors?.bio}
 					/>
 				</label>
 
-				<button type="submit">Save</button>
+				<Button text="Save" />
 			</form>
 		</div>
 	)
