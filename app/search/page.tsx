@@ -5,7 +5,7 @@ import Input from "@/components/input"
 import Tweet from "@/components/tweet"
 import { SpeakerWaveIcon } from "@heroicons/react/16/solid"
 import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { InitialTweets } from "../(home)/page"
 import { searchTweets } from "./action"
@@ -14,7 +14,6 @@ export default function Search() {
 	const [search, setSearch] = useState("")
 	const [q, setQ] = useState<string | null>("")
 	const router = useRouter()
-	const searchParams = useSearchParams()
 
 	const [tweets, setTweets] = useState<InitialTweets>([])
 	const [loading, setLoading] = useState(false)
